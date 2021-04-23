@@ -19,7 +19,7 @@ class debug(commands.Cog):
       except Exception as e:
           await ctx.send('**エラー**' + '\n'.join(e.args))
       else:
-          await ctx.send(f"cogs.{name}のリロードに成功しました()")
+          await ctx.send(f"cogs.{name}のリロードに成功しました")
     else:
         await ctx.send("あなたには権限がありません()")
   @debug.command(name="reload",aliases=["re"])
@@ -32,9 +32,9 @@ class debug(commands.Cog):
       except Exception as e:
           await ctx.send('**エラー**' + '\n'.join(e.args))
       else:
-          await ctx.send(f"cogs.{name}のリロードに成功しました()")
+          await ctx.send(f"cogs.{name}のリロードに成功しました")
     else:
-        await ctx.send("あなたには権限がありません()")
+        await ctx.send("あなたには権限がありません")
   @debug.command(name="reboot")
   async def reboot(self, ctx):
     role = ctx.guild.get_role(813389100815351869)
@@ -44,15 +44,15 @@ class debug(commands.Cog):
       python = sys.executable 
       os.execl(python, python, *sys.argv)
     else:
-        await ctx.send("あなたには権限がありません()")
+        await ctx.send("あなたには権限がありません")
   @debug.command()
   async def eval(self, message):
     role = message.guild.get_role(813389100815351869)
     if message.author.guild_permissions.administrator or role in message.author.roles:
-      if message.content.startswith("/eval await "):
+      if message.content.startswith("debug eval await "):
           src = message.content.split(" ", 2)[-1].lstrip()
           await eval(src)
-      elif message.content.startswith("/eval"):
+      elif message.content.startswith("debug eval"):
         src = message.content.split(" ", 2)[-1].lstrip()
         await eval(src)
 def setup(bot):

@@ -203,11 +203,11 @@ version = "5.1.0"
 
 [[package]]
 category = "main"
-description = "Python interface to MySQL"
-name = "mysql-python"
+description = "Handle some of the strange standards in PHP projects"
+name = "php"
 optional = false
 python-versions = "*"
-version = "1.2.5"
+version = "1.2.1"
 
 [[package]]
 category = "main"
@@ -273,6 +273,14 @@ version = "1.15.0"
 
 [[package]]
 category = "main"
+description = "DB API 2.0 for Humans"
+name = "sql"
+optional = false
+python-versions = "*"
+version = "0.4.0"
+
+[[package]]
+category = "main"
 description = "Backported and Experimental Type Hints for Python 3.5+"
 name = "typing-extensions"
 optional = false
@@ -312,7 +320,7 @@ python-versions = "*"
 version = "2021.4.7"
 
 [metadata]
-content-hash = "aa98d6bdf14e78c70f6ba3886564d73c2c4f6354735f9e676be607d1cf3793fa"
+content-hash = "5fafc5b562235818970362fbac3183c743ac0001b1d79fbbf880327d2e59f837"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -551,9 +559,8 @@ multidict = [
     {file = "multidict-5.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:7df80d07818b385f3129180369079bd6934cf70469f99daaebfac89dca288359"},
     {file = "multidict-5.1.0.tar.gz", hash = "sha256:25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5"},
 ]
-mysql-python = [
-    {file = "MySQL-python-1.2.5.win32-py2.7.exe", hash = "sha256:ab22d1322099098730a57fd59d610f60738f95a1cb68dacca2d1c47cb0cbe8ee"},
-    {file = "MySQL-python-1.2.5.zip", hash = "sha256:811040b647e5d5686f84db415efd697e6250008b112b6909ba77ac059e140c74"},
+php = [
+    {file = "php-1.2.1.tar.gz", hash = "sha256:6ab4fb13397a46e3cf0aba5b800884221cafdf636b04a44f19e658a8c9ac6542"},
 ]
 pycparser = [
     {file = "pycparser-2.20-py2.py3-none-any.whl", hash = "sha256:7582ad22678f0fcd81102833f60ef8d0e57288b6b5fb00323d101be910e35705"},
@@ -593,6 +600,9 @@ sgmllib3k = [
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
+]
+sql = [
+    {file = "sql-0.4.0.tar.gz", hash = "sha256:7c96955a2f5e99e38e0e5527da2c4be00b0b372ed4d33b5152c8fb71478318ea"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.7.4.3-py2-none-any.whl", hash = "sha256:dafc7639cde7f1b6e1acc0f457842a83e722ccca8eef5270af2d74792619a89f"},

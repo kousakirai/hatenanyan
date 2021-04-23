@@ -1,9 +1,14 @@
 from discord.ext import commands
 import discord
+from discord.ext.commands import CommandNotFound, CommandOnCooldown
 class weakup(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
+  @commands.Cog.listener()
+  async def on_command_error(self, ctx, error):
+    if isinstance(error, CommandNotFound):
+        await ctx.send(f"{ctx.message.content}は未知のコマンドです。")
   @commands.Cog.listener()
   async def on_ready(self):
     print('起動中です...')

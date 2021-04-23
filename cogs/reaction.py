@@ -11,6 +11,36 @@ class role_add(commands.Cog):
     intents.reactions = True  
   @commands.Cog.listener()
   async def on_raw_reaction_add(self, payload):
+      if payload.member.bot: # BOTアカウントは無視する
+          return
+
+      if payload.channel_id != 123456789123: # 特定のチャンネル以外でリアクションした場合は無視する
+          return
+
+      if payload.emoji.name == "👍": # 特定の絵文字
+          await payload.member.add_roles(
+              payload.member.guild.get_role(123456789123) # ロールID
+            )
+
+  @commands.Cog.listener()
+  async def on_raw_reaction_remove(self, payload):
+    guild = self.bot.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+    if guild is None or member is None: # サーバーやメンバー情報が読めなかったら無視
+        return
+
+    if member.bot: # BOTアカウントは無視する
+        return
+
+    if payload.channel_id != 123456789123: # 特定のチャンネル以外でリアクションを解除した場合は無視する
+        return
+
+    if payload.emoji.name == "👍": # 特定の絵文字
+        await payload.member.remove_roles(
+            payload.member.guild.get_role(123456789123) # ロールID
+            )
+  @commands.Cog.listener()
+  async def on_raw_reaction_add(self, payload):
     # channel_id から Channel オブジェクトを取得
     
     channel = self.bot.get_channel(payload.channel_id)
