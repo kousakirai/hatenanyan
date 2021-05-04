@@ -15,7 +15,7 @@ class log(commands.Cog):
       embed.add_field(name="発言者",value=f"{message.author.mention}({message.author})\nID:{message.author.id}",inline=False)
       embed.add_field(name="チャンネル",value=f"{message.channel.mention}({message.channel.name})\nID:{message.channel.id}",inline=False)
       embed.add_field(name="メッセージ内容",value="なし" if not message.content else message.content,inline=False)
-      channel = self.bot.get_channel(8(818817278912626718)
+      channel = self.bot.get_channel(821245836163547176)
       await channel.send(embed=embed)
 def setup(bot):
   return bot.add_cog(log(bot))

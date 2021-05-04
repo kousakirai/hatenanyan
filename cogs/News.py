@@ -60,13 +60,18 @@ class News(commands.Cog):
     return returnlist
   @commands.command(name="News")
   async def testnews(self, ctx):
+    count = 0
     guild = self.bot.get_guild(774477394924666890)
     channel = guild.get_channel(774486601710436392)  #発言チャンネルを指定
     news_list = self.news_get()
     #ニュースをチャットに送信
     for news in news_list:
-      await channel.send(news)
-
+      message=await channel.send(news)
+      await message.publish()
+      count+=1
+      if count == 10:
+          count = 0
+          break
   @tasks.loop(hours=2)
   async def get_news(self):
     await self.bot.wait_until_ready()    
@@ -75,7 +80,9 @@ class News(commands.Cog):
     for news in news_list:
       guild = self.bot.get_guild(774477394924666890)
       channel = guild.get_channel(774486601710436392)
-      await channel.send(news)
+      message=await channel.send(news)
+      await message.publish()
+
     def cog_unload(self):
       for t in self.tasks:
         t.cancel()

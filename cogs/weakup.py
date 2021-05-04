@@ -18,7 +18,7 @@ class weakup(commands.Cog):
     await self.bot.change_presence(activity=discord.Game(name="こんにちはープレフィックスはh:だよー()", type=1))
     channel = self.bot.get_channel(818817278912626718)
     self.bot.load_extension("cogs.Block")
-
+    
     self.bot.load_extension("adminonly.debug")
 
     self.bot.load_extension("cogs.users")
@@ -37,7 +37,11 @@ class weakup(commands.Cog):
 
     self.bot.load_extension("cogs.slashcommand")
     
+    self.bot.load_extension("cogs.welcome")
+    
     self.bot.load_extension("cogs.log")
+    
+    self.bot.load_extension("jishaku")
     await channel.send("```疑問猫Bot再起動しました。起動時になにかエラーが起きた場合は制作者のkousakiraiにお伝え下さい。社畜のように働きます()```")
     
 def setup(bot):
