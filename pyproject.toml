@@ -20,6 +20,8 @@ sql = "^0.4.0"
 jishaku = "^1.20.0"
 asyncpg = "^0.22.0"
 gtts = "^2.2.2"
+GoogleSearch-Api-2020 = "^0.0.6"
+tinydb = "^4.4.0"
 
 [tool.poetry.dev-dependencies]
 
