@@ -15,8 +15,8 @@ class Users(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send('メインコマンドの後にサブコマンドが必要です。')
     @user.command(pass_context=True)
-    async def dm(self, ctx, ids, word):
-      user = discord.utils.get(self.bot.users, id=ids)
+    async def dm(self, ctx, ids):
+      user = discord.utils.get(self.bot.users, id=ctx)
       try:
           await user.send(f"{ctx.author.name}さんからDMが届きました。\nメッセージ内容\n{word}")
       except AttributeError:

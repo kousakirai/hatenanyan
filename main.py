@@ -9,9 +9,7 @@ from cogs.help import JapaneseHelpCommand
 from discord_slash import SlashCommand
 prefix = "h?", "h:"
 
-bot = commands.Bot(command_prefix=prefix,help_command=JapaneseHelpCommand(), 
-case_insensitive=True,
-intents=discord.Intents.all())
+bot = commands.Bot(command_prefix=prefix,help_command=JapaneseHelpCommand(), intents=discord.Intents.all(), case_insensitive=True)
 slash = SlashCommand(bot, override_type = True, sync_commands=True)
 
 bot.author_id=757106917947605034

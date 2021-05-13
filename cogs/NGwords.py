@@ -5,13 +5,15 @@ import aiofile
 import json
 import datetime
 
-class NGwords(commands.Cog):
+class NGs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.path = os.path.dirname(__file__) + "/txtfiles/NGwords.json"
         with open(self.path, "r") as f:
             content = f.read()
         self.content = json.loads(content)
+    
+    
     @commands.Cog.listener()
     async def on_message(self,message):
         if message.author.id == 821725199069085706:return
@@ -26,18 +28,24 @@ class NGwords(commands.Cog):
                 embed.add_field(name="メッセージ内容",value=message.content.replace(word,f"||{word}||"),inline=False)
                 await self.bot.get_channel(822112963535568936).send(embed=embed)
                 break
-    @commands.group(aliases=["ng","ngwords","NGword","ngword"])
-    async def NGwords(self, ctx):
+    
+    
+    @commands.group(aliases=["ng", "ngwords"])
+    async def NGword(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.send('メインコマンドの後にサブコマンドが必要です。')
-    @NGwords.command(name="add")
+    
+    
+    @NGword.command(name="add")
     @commands.has_permissions(manage_messages=True)
     async def add(self, ctx, *, message):
       self.content.append(message)
       async with aiofile.async_open(self.path, "w", encoding = "utf_8") as f:
           await f.write(json.dumps(self.content))
       await ctx.send("NGリストに追加しました。") 
-    @NGwords.command(name="remove",aliases=["delete", "del"])
+    
+    
+    @NGword.command(name="remove",aliases=["delete", "del"])
     @commands.has_permissions(manage_messages=True)
     async def ng_remove(self, ctx, message):
       if not message in self.content:
@@ -46,7 +54,9 @@ class NGwords(commands.Cog):
       async with aiofile.async_open(self.path, "w", encoding = "utf_8") as f:
           await f.write(json.dumps(self.content))
       await ctx.send("完了。")
-    @NGwords.command(name="list")
+    
+    
+    @NGword.command(name="list")
     @commands.has_permissions(manage_messages=True)
     async def ng_list(self, ctx):
       n='\n'.join(self.content)
@@ -54,4 +64,4 @@ class NGwords(commands.Cog):
       await ctx.message.add_reaction("✅")
     
 def setup(bot):
-  return bot.add_cog(NGwords(bot))
+  return bot.add_cog(NGs(bot))
