@@ -66,12 +66,7 @@ class News(commands.Cog):
     news_list = self.news_get()
     #ニュースをチャットに送信
     for news in news_list:
-      message=await channel.send(news)
-      await message.publish()
-      count+=1
-      if count == 10:
-          count = 0
-          break
+      await channel.send(news)
   @tasks.loop(hours=2)
   async def get_news(self):
     await self.bot.wait_until_ready()    
@@ -80,8 +75,7 @@ class News(commands.Cog):
     for news in news_list:
       guild = self.bot.get_guild(774477394924666890)
       channel = guild.get_channel(774486601710436392)
-      message=await channel.send(news)
-      await message.publish()
+      await channel.send(news)
 
     def cog_unload(self):
       for t in self.tasks:

@@ -9,7 +9,7 @@ class role_add(commands.Cog):
     self.ID_ROLE_WELCOME = 703451279489237042 # 付けたい役職のID 
     intents=discord.Intents.all()
     intents.reactions = True  
-  @commands.Cog.listener
+  @commands.Cog.listener()
   async def on_raw_reaction_add(self, payload):
 
     channel = self.bot.get_channel(payload.channel_id)

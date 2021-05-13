@@ -1,10 +1,18 @@
 from discord.ext import commands
 import discord
+import asyncio
 from discord.ext.commands import CommandNotFound, CommandOnCooldown
 class weakup(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
+  async def status_task(self):
+    while True:
+        guild = self.bot.get_guild(774477394924666890)
+        user_count = sum(1 for member in guild.members if not member.bot)
+        game = discord.Game(f"In {user_count} users.")
+        await self.bot.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(30)
   @commands.Cog.listener()
   async def on_command_error(self, ctx, error):
     if isinstance(error, CommandNotFound):
@@ -15,7 +23,6 @@ class weakup(commands.Cog):
     print(self.bot.user.name)
     print(self.bot.user.id)
     print('おはようございますマスター！()')
-    await self.bot.change_presence(activity=discord.Game(name="こんにちはープレフィックスはh:だよー()", type=1))
     channel = self.bot.get_channel(818817278912626718)
     self.bot.load_extension("cogs.Block")
     
@@ -41,8 +48,11 @@ class weakup(commands.Cog):
     
     self.bot.load_extension("cogs.log")
     
-    self.bot.load_extension("jishaku")
+    self.bot.load_extension("cogs.yomi")
+    
     await channel.send("```疑問猫Bot再起動しました。起動時になにかエラーが起きた場合は制作者のkousakiraiにお伝え下さい。社畜のように働きます()```")
     
+    self.bot.loop.create_task(self.status_task())
+
 def setup(bot):
   return bot.add_cog(weakup(bot))

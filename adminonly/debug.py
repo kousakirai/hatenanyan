@@ -2,13 +2,16 @@ import sys
 import os                               
 import discord
 from discord.ext import commands
+
 class debug(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
+
   @commands.group(name="debug")
   async def debug(self, ctx):
     if ctx.invoked_subcommand is None:
         await ctx.send('メインコマンドの後にサブコマンドが必要です()')
+  
   @debug.command(name="reload2",aliases=["r2"])
   @commands.has_permissions(manage_roles=True)
   async def reload2(self, ctx, name):  
@@ -22,7 +25,8 @@ class debug(commands.Cog):
           await ctx.send(f"cogs.{name}のリロードに成功しました")
     else:
         await ctx.send("あなたには権限がありません()")
-  @debug.command(name="reload",aliases=["re"])
+  
+  @debug.command(name="reloads",aliases=["re"])
   @commands.has_permissions(manage_roles=True)
   async def reload1(self, ctx, name):
     role = ctx.guild.get_role(813389100815351869)
@@ -35,6 +39,7 @@ class debug(commands.Cog):
           await ctx.send(f"cogs.{name}のリロードに成功しました")
     else:
         await ctx.send("あなたには権限がありません")
+  
   @debug.command(name="reboot")
   async def reboot(self, ctx):
     role = ctx.guild.get_role(813389100815351869)
@@ -45,15 +50,42 @@ class debug(commands.Cog):
       os.execl(python, python, *sys.argv)
     else:
         await ctx.send("あなたには権限がありません")
+  
   @debug.command()
   async def eval(self, message):
     role = message.guild.get_role(813389100815351869)
     if message.author.guild_permissions.administrator or role in message.author.roles:
-      if message.content.startswith("debug eval await "):
+      if message.content.startswith("await "):
           src = message.content.split(" ", 2)[-1].lstrip()
           await eval(src)
-      elif message.content.startswith("debug eval"):
+      else:
         src = message.content.split(" ", 2)[-1].lstrip()
         await eval(src)
+  
+  @commands.command(name="reload", aliases=["re"])
+  @commands.is_owner()
+  async def reload(self, ctx, cog=None):
+      if cog:
+          try:
+              self.bot.reload_extension("cogs." + cog)
+          except commands.errors.ExtensionNotLoaded:
+              self.bot.load_extension("cogs." + cog)
+          except commands.errors.NoEntryPointError:
+              pass
+          return await ctx.message.add_reaction("✅")
+          for o in os.listdir(os.path.dirname(os.path.abspath(__file__))):
+              try:
+                  if not o.endswith(".py"):
+                      continue
+                  self.bot.reload_extension(
+                      "cogs." + os.path.splitext(os.path.basename(o))[0])
+              except commands.errors.ExtensionNotLoaded:
+                      self.bot.load_extension(
+                        "cogs." + os.path.splitext(os.path.basename(o))[0])
+              except commands.errors.NoEntryPointError:
+                  pass
+      await ctx.message.add_reaction("✅")
+        
+
 def setup(bot):
   return bot.add_cog(debug(bot))
