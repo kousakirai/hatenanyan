@@ -7,13 +7,6 @@ class weakup(commands.Cog):
     self.bot = bot
 
 
-  
-  
-  
-  
-  
-  
-  
   async def status_task(self):
     while True:
         guild = self.bot.get_guild(774477394924666890)
@@ -21,6 +14,8 @@ class weakup(commands.Cog):
         game = discord.Game(f"In {user_count} users.")
         await self.bot.change_presence(status=discord.Status.online, activity=game)
         await asyncio.sleep(30)
+  
+  
   @commands.Cog.listener()
   async def on_command_error(self, ctx, error):
     if isinstance(error, CommandNotFound):
@@ -63,8 +58,6 @@ class weakup(commands.Cog):
     self.bot.load_extension("cogs.messagecount")
    
     self.bot.load_extension("cogs.reaction")
-
-    self.bot.load_extension("cogs.slashcommand")
     
     self.bot.load_extension("cogs.welcome")
     

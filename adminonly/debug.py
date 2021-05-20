@@ -2,6 +2,11 @@ import sys
 import os                               
 import discord
 from discord.ext import commands
+from tinydb import TinyDB,Query
+
+db=TinyDB('db.json')
+
+User=Query()
 
 class debug(commands.Cog):
   def __init__(self, bot):
@@ -72,6 +77,12 @@ class debug(commands.Cog):
               except commands.errors.NoEntryPointError:
                   pass
       await ctx.message.add_reaction("✅")
+  
+  @debug.command(name='test')
+  async def _test(self,ctx):
+    if db.search(User.name==ctx.author.id) == ctx.author.id:
+      a=db.search(User.name==ctx.author.id)
+      print(a[0]['name'],a[0]['age'])
         
 
 def setup(bot):
