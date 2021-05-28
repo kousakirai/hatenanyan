@@ -18,7 +18,8 @@ class NGs(commands.Cog):
     async def on_message(self,message):
         if message.author.id == 821725199069085706:return
         for word in self.content: 
-            if word in message.content:
+            msg = message.content.lower()
+            if word in msg:
                 if message.content.startswith("h?NGwords remove "):return
                 await message.delete()
                 await message.channel.send(f"{message.author.mention},NGワードを発言したためメッセージを削除しました。", delete_after=4.0)
@@ -39,7 +40,8 @@ class NGs(commands.Cog):
     @NGword.command(name="add")
     @commands.has_permissions(manage_messages=True)
     async def add(self, ctx, *, message):
-      self.content.append(message)
+      msg = message.lower()
+      self.content.append(msg)
       async with aiofile.async_open(self.path, "w", encoding = "utf_8") as f:
           await f.write(json.dumps(self.content))
       await ctx.send("NGリストに追加しました。") 
@@ -50,7 +52,8 @@ class NGs(commands.Cog):
     async def ng_remove(self, ctx, message):
       if not message in self.content:
           return await ctx.send("その言葉はリストにありません。")
-      self.content.remove(message)
+      msg = message.lower()
+      self.content.remove(msg)
       async with aiofile.async_open(self.path, "w", encoding = "utf_8") as f:
           await f.write(json.dumps(self.content))
       await ctx.send("完了。")

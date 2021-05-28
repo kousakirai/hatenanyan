@@ -18,8 +18,6 @@ class weakup(commands.Cog):
   
   @commands.Cog.listener()
   async def on_command_error(self, ctx, error):
-    if isinstance(error, CommandNotFound):
-        await ctx.send(f"{ctx.message.content}は未知のコマンドです。")
     ch = 832560631818485790
     embed = discord.Embed(title="エラー情報", description="", color=0xf00)
     embed.add_field(name="エラー発生サーバー名", value=ctx.guild.name, inline=False)
@@ -62,8 +60,6 @@ class weakup(commands.Cog):
     self.bot.load_extension("cogs.welcome")
     
     self.bot.load_extension("cogs.log")
-    
-    self.bot.load_extension("cogs.yomi")
     
     await channel.send("```疑問猫Bot再起動しました。起動時になにかエラーが起きた場合は制作者のkousakiraiにお伝え下さい。社畜のように働きます()```")
      

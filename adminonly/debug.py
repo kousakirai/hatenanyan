@@ -26,7 +26,7 @@ class debug(commands.Cog):
       except Exception as e:
           await ctx.send('**エラー**' + '\n'.join(e.args))
       else:
-          await ctx.send(f"cogs.{name}のリロードに成功しました")
+          await ctx.send(f"adminonly.{name}のリロードに成功しました")
     else:
         await ctx.send("あなたには権限がありません()")
   
@@ -48,7 +48,7 @@ class debug(commands.Cog):
     role = ctx.guild.get_role(813389100815351869)
     if ctx.author.guild_permissions.administrator or role in ctx.author.roles:
       await ctx.send("Botを再起動します。")
-      await self.bot.change_presence(activity=discord.Game(name="reboot...", type=1))      
+      await self.bot.change_presence(activity=discord.Game(name="rebooting now...", type=1))      
       python = sys.executable 
       os.execl(python, python, *sys.argv)
     else:
