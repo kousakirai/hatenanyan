@@ -1,0 +1,4 @@
+status=discord.Status.online, activity=discord.Game
+
+user_count = sum(1 for member in guild.members if not member.bot)
+game = discord.Game(f"In {user_count} users.")

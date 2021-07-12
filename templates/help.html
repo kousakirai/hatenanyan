@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>コマンドページです</h2>
+<table class="use" border="1">
+  <tr>
+    <th>コマンド名</th>
+    <th>使い方</th>
+  </tr>
+  <tr>
+    <td>h?trans [翻訳したい言葉]</td>
+    <td>google翻訳を使って翻訳してくれます。</td>
+  </tr>
+  <tr>
+    <td>h?url_info [URL]</td>
+    <td>norton safewebを使って安全かどうか確かめます</td>
+  </tr>
+  <tr>
+    <td>h?music join</td>
+    <td>botをボイスチャンネルに接続させます</td>
+  </tr>
+  <tr>
+    <td>h?music play [youtube動画のURL]</td>
+    <td>音楽を再生させます。</td>
+  </tr>
+</table>
+{% endblock %}

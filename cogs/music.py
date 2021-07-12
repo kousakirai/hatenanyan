@@ -17,12 +17,11 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address':
+    '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 
-ffmpeg_options = {
-    'options': '-vn'
-}
+ffmpeg_options = {'options': '-vn'}
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
@@ -39,100 +38,134 @@ class YTDLSource(discord.PCMVolumeTransformer):
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+        data = await loop.run_in_executor(
+            None, lambda: ytdl.extract_info(url, download=not stream))
 
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options),
+                   data=data)
+
 
 class music(commands.Cog):
+    """
+    音楽機能のカテゴリです。
+    """
     def __init__(self, bot):
-      self.bot = bot
-      self.d = deque()
+        self.bot = bot
+        self.d = deque()
+
     @commands.group()
     async def music(self, ctx):
-      if ctx.invoked_subcommand is None:
-          await ctx.send('メインコマンドの後にサブコマンドが必要です。')
-    
+        if ctx.invoked_subcommand is None:
+            await ctx.send('メインコマンドの後にサブコマンドが必要です。')
+
     @music.command()
     async def join(self, ctx):
-      if ctx.author.voice is None:
-          await ctx.channel.send("あなたはボイスチャンネルに接続していません。")
-          return
+        """
+      botを現在入っているボイスチャンネルに呼び出します。
+      """
+        if ctx.author.voice is None:
+            await ctx.channel.send("あなたはボイスチャンネルに接続していません。")
+            return
         # ボイスチャンネルに接続する
-      await ctx.author.voice.channel.connect()
-      await ctx.send("接続しました。")
-    
+        await ctx.author.voice.channel.connect()
+        await ctx.send("接続しました。")
+
     @music.command()
     async def leave(self, ctx):
-      if ctx.guild.voice_client is None:
+        """
+      Botをボイスチャンネルから離脱させます。
+      """
+        if ctx.guild.voice_client is None:
             await ctx.send("接続していません。")
             return
-      if ctx.guild.voice_client.is_playing():
+        if ctx.guild.voice_client.is_playing():
             await ctx.send("再生中です。")
             return
-      self.d.clear()
-      await ctx.guild.voice_client.disconnect()
-      await ctx.send("切断しました。")
-    
+        self.d.clear()
+        await ctx.guild.voice_client.disconnect()
+        await ctx.send("切断しました。")
+
     async def play_only(self, ctx):
-            urls = self.d[0]
-            player = await YTDLSource.from_url(urls, loop=self.bot.loop)
-            embed=discord.Embed(title="音楽キューシステム",description=f"キューリストに追加されました。" ,color=0xff0000)
-            embed.add_field(name="音楽名",value=f"{urls}",inline=False)
-            await ctx.send(embed=embed)
-            return ctx.guild.voice_client.play(player, after=lambda _:self.bot.loop.create_task(self.play_end(ctx)))
-    
+        urls = self.d[0]
+        player = await YTDLSource.from_url(urls, loop=self.bot.loop)
+        embed = discord.Embed(title="音楽キューシステム",
+                              description=f"キューリストに追加されました。",
+                              color=0xff0000)
+        embed.add_field(name="音楽名", value=f"{urls}", inline=False)
+        await ctx.send(embed=embed)
+        return ctx.guild.voice_client.play(
+            player,
+            after=lambda _: self.bot.loop.create_task(self.play_end(ctx)))
+
     async def play_end(self, ctx):
-            self.d.popleft()
-            if len(self.d) == 0:
-                return await ctx.send("キューの中身が空になりました。再生を終了します。")
-            else:
-                await ctx.send("次の曲を再生します。")
-                return self.play_only(ctx)
-    
+        self.d.popleft()
+        if len(self.d) == 0:
+            return await ctx.send("キューの中身が空になりました。再生を終了します。")
+        else:
+            await ctx.send("次の曲を再生します。")
+            return self.play_only(ctx)
+
     @music.command()
-    async def play(self, ctx,*,message):
-      # youtubeから音楽をダウンロードする
-      if ctx.guild.voice_client is None:
+    async def play(self, ctx, *, message):
+        """
+      音楽を再生します。Botがボイスチャンネルに入っていないと
+      機能しません。
+      \nYoutubeからダウンロードするのでURLを指定してください。
+      """
+        # youtubeから音楽をダウンロードする
+        if ctx.guild.voice_client is None:
             await ctx.channel.send("接続していません。")
             return
-      url = message
-      self.d.append(url)
-      await ctx.send("キューに追加しました。")
-      if len(self.d) == 1:
-        await self.play_only(ctx)
+        url = message
+        self.d.append(url)
+        await ctx.send("キューに追加しました。")
+        if len(self.d) == 1:
+            await self.play_only(ctx)
+            
+    @music.command()
+    async def play_2(self, ctx, *, url):
+        if ctx.guild.voice_client is None:
+          await ctx.author.voice.channel.connect()
+          await ctx.send("接続しました。")
+        player = discord.FFmpegPCMAudio(f"https://www.google.com/speech-api/v1/synthesize?text={url}&enc=mpeg&lang=ja&speed=0.5&client=lr-language-tts&use_google_only_voices=1")
+        ctx.guild.voice_client.play(player)
+        await ctx.send("流します")
+
     @music.command()
     async def pause(self, ctx):
-      if ctx.guild.voice_client is None:
-          await ctx.send("接続していません。")
-          return
+        if ctx.guild.voice_client is None:
+            await ctx.send("接続していません。")
+            return
 
-      # 再生中ではない場合は実行しない
-      if not ctx.guild.voice_client.is_playing():
-        await ctx.send("再生していません。")
-        return
-      ctx.guild.voice_client.stop()
-      await ctx.send("再生中の曲を中断しました。")
+        # 再生中ではない場合は実行しない
+        if not ctx.guild.voice_client.is_playing():
+            await ctx.send("再生していません。")
+            return
+        ctx.guild.voice_client.stop()
+        await ctx.send("再生中の曲を中断しました。")
 
     @music.command()
     async def resume(self, ctx):
-      if ctx.guild.voice_client is None:
-          await ctx.send("接続していません。")
-          return
-      if not ctx.guild.voice_client.stop():
-        ctx.send("再生中です。")
-      await self.play_only(ctx)
-      await ctx.send("再生します。")
+        if ctx.guild.voice_client is None:
+            await ctx.send("接続していません。")
+            return
+        if not ctx.guild.voice_client.stop():
+            ctx.send("再生中です。")
+        await self.play_only(ctx)
+        await ctx.send("再生します。")
+
     @music.command()
     async def list(self, ctx):
-      if len(self.d) == 0:
-        await ctx.send("キューには何も入っていません。")
-      else:
-        await ctx.send(f"```{self.d}```")
+        if len(self.d) == 0:
+            await ctx.send("キューには何も入っていません。")
+        else:
+            await ctx.send(f"```{self.d}```")
+
     @music.command()
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
@@ -142,8 +175,7 @@ class music(commands.Cog):
 
         ctx.voice_client.source.volume = volume / 100
         await ctx.send("音量を{}%に変更しました。".format(volume))
-  
 
 
 def setup(bot):
-  return bot.add_cog(music(bot))
+    return bot.add_cog(music(bot))

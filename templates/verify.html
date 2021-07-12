@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+      <h2 class="use">hcaptcha認証したあとsubmitを押してください</h2>
+    　<form class="captcha" method="post" action="/captcha?id={{id2}}">
+      {{ xcaptcha }}
+      <input type="submit" value="submit">
+      </form>
+{% endblock %}

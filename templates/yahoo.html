@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div>
+        <h2>YAHOONEWS</h2>
+        {% for e in e_title %}
+          <details>
+            <summary><a href={{e.link}}>{{e.title}}</a></summary>
+            <p>{{e.description}}</p>
+          </details>
+        {% endfor %}
+      </div>
+{% endblock %}
